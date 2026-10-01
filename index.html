@@ -111,6 +111,27 @@
             pointer-events: auto;
         }
         
+        #introOverlay .intro-site {
+            position: absolute;
+            top: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            line-height: 1.2;
+            white-space: nowrap;
+        }
+        
+        #introOverlay .intro-site-link {
+            color: #FFFFFF;
+            text-decoration: none;
+            pointer-events: auto;
+            cursor: pointer;
+        }
+        
+        #introOverlay .intro-site-link:hover {
+            color: #15FF00;
+        }
+        
         #introOverlay.clickable {
             cursor: pointer;
         }
@@ -221,11 +242,42 @@
         #prayer.fade-in {
             animation: fadeIn 2s ease-in;
         }
+        
+        #collectCredit {
+            position: fixed;
+            bottom: 28px;
+            left: 24px;
+            transform: none;
+            color: #FFFFFF;
+            font-family: Arial, sans-serif;
+            font-size: 11px;
+            font-style: italic;
+            text-align: left;
+            z-index: 3000;
+            display: none;
+            pointer-events: none;
+            line-height: 1.5;
+            white-space: nowrap;
+        }
+        
+        #collectCredit a {
+            color: #FFFFFF;
+            text-decoration: none;
+            pointer-events: auto;
+            cursor: pointer;
+        }
+        
+        #collectCredit a:hover {
+            color: #15FF00;
+        }
     </style>
 </head>
 <body>
     <canvas id="gameCanvas"></canvas>
     <div id="introOverlay">
+        <div class="intro-site">
+            [<a class="intro-site-link" id="introSiteLink" href="https://geniusloci.palekirill.xyz" target="_blank" rel="noopener noreferrer">geniusloci.palekirill.xyz</a>]
+        </div>
         <div class="intro-logo-wrap">
             <img src="logo.svg" alt="genius loci" class="intro-logo" id="introLogoImage">
             <span class="intro-label" id="introLabel"></span>
@@ -238,6 +290,7 @@
     <div id="sourceCodeOverlay"></div>
     <div id="subtitle"></div>
     <div id="prayer"></div>
+    <div id="collectCredit"></div>
     
     <script src="game.js"></script>
 </body>

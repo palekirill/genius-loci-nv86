@@ -9,6 +9,9 @@ class glexperience {
         this.introLabel = document.getElementById('introLabel');
 
         this.introClickHandler = (e) => {
+            if (e.target.closest && e.target.closest('#introSiteLink')) {
+                return;
+            }
             if (this.assetsReady && !this.isLoading && !this.introDismissed) {
                 document.removeEventListener('click', this.introClickHandler);
                 document.removeEventListener('touchstart', this.introClickHandler);
@@ -17,6 +20,55 @@ class glexperience {
                     this.introOverlay.removeEventListener('touchstart', this.introClickHandler);
                 }
                 this.hideIntroAndStart();
+            }
+        };
+
+        // Onchain collect credits for looped scenes
+        this.collectCredits = {
+            video18: {
+                title: 'angel in my bedroom',
+                owner: '0xEA94DACE59eDe50C55d53cC90c26d8ec4Ff0B685',
+                url: 'https://verse.works/items/ethereum/0x245a3c9fb9270097afcca212f1dd6224843ff58e/2'
+            },
+            video20: {
+                title: 'no ugly flowers',
+                owner: '0xad18dc2068c0e09d49d9289654829567d734bfee',
+                url: 'https://verse.works/items/ethereum/0x245a3c9fb9270097afcca212f1dd6224843ff58e/1'
+            },
+            video27: {
+                title: 'a time long before',
+                owner: '0xEA94DACE59eDe50C55d53cC90c26d8ec4Ff0B685',
+                url: 'https://verse.works/items/ethereum/0x245a3c9fb9270097afcca212f1dd6224843ff58e/6'
+            },
+            video29: {
+                title: 'follow the error',
+                owner: '0xEA94DACE59eDe50C55d53cC90c26d8ec4Ff0B685',
+                url: 'https://verse.works/items/ethereum/0x245a3c9fb9270097afcca212f1dd6224843ff58e/4'
+            },
+            video33: {
+                title: 'we can escape this way',
+                owner: '0xEA94DACE59eDe50C55d53cC90c26d8ec4Ff0B685',
+                url: 'https://verse.works/items/ethereum/0x245a3c9fb9270097afcca212f1dd6224843ff58e/9'
+            },
+            video36: {
+                title: 'everything asks for silence',
+                owner: '0xEA94DACE59eDe50C55d53cC90c26d8ec4Ff0B685',
+                url: 'https://verse.works/items/ethereum/0x245a3c9fb9270097afcca212f1dd6224843ff58e/5'
+            },
+            video38: {
+                title: 'waiting for the right time',
+                owner: '0xad18dc2068c0e09d49d9289654829567d734bfee',
+                url: 'https://verse.works/items/ethereum/0x245a3c9fb9270097afcca212f1dd6224843ff58e/10'
+            },
+            video41: {
+                title: 'another moment another angle',
+                owner: '0xEA94DACE59eDe50C55d53cC90c26d8ec4Ff0B685',
+                url: 'https://verse.works/items/ethereum/0x245a3c9fb9270097afcca212f1dd6224843ff58e/8'
+            },
+            video44: {
+                title: 'system about to crack',
+                owner: '0xEA94DACE59eDe50C55d53cC90c26d8ec4Ff0B685',
+                url: 'https://verse.works/items/ethereum/0x245a3c9fb9270097afcca212f1dd6224843ff58e/3'
             }
         };
         document.addEventListener('click', this.introClickHandler);
@@ -495,6 +547,7 @@ class glexperience {
                 }
             });
             this.currentVideo = 'sourceCode';
+            this.updateCollectCredit(null);
             return;
         }
 
@@ -513,6 +566,7 @@ class glexperience {
                 // особая логика для video21: после него показываем интро (экран с Play)
                 if (videoName === 'video21') {
                     this.mode = 'intro';
+                    this.updateCollectCredit(null);
                     window.dispatchEvent(new Event('resize'));
                     return;
                 }
@@ -533,6 +587,28 @@ class glexperience {
         });
 
         this.currentVideo = videoName;
+        this.updateCollectCredit(videoName);
+    }
+
+    shortWallet(address) {
+        if (!address || address.length < 10) return address || '';
+        return `${address.slice(0, 6)}...${address.slice(-4)}`;
+    }
+
+    updateCollectCredit(videoName) {
+        const creditElement = document.getElementById('collectCredit');
+        if (!creditElement) return;
+
+        const credit = videoName ? this.collectCredits[videoName] : null;
+        if (!credit) {
+            creditElement.style.display = 'none';
+            creditElement.innerHTML = '';
+            return;
+        }
+
+        const ownerShort = this.shortWallet(credit.owner);
+        creditElement.innerHTML = `<a href="${credit.url}" target="_blank" rel="noopener noreferrer">${credit.title} >> presented on verse, owned by ${ownerShort}</a>`;
+        creditElement.style.display = 'block';
     }
 
     getNextVideo(currentVideoName) {
@@ -992,6 +1068,7 @@ class glexperience {
             }
         });
         this.currentVideo = null;
+        this.updateCollectCredit(null);
 
         this.miniGame = {
             playerWidth: 140,
